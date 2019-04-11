@@ -7,46 +7,44 @@
 # 分治思想分析：（1）将数组分为两部分，分别求出左边的逆序数和右边的逆序数；
 #              （2）再计算有多少是由左半边取一个数和右半边取一个数构成(关键：左半边和右半边都是排好序的)
 
-def reverse_order_number(a):
-  count = 0
-  R_MergeSort(a, count)
-  return count
+def InversePairs(a):
+  return R_MergeSort(a)
   
-def R_MergeSort(a, count):
+def R_MergeSort(a):
+  count = 0
   if len(a) > 1:  # 不少于两个元素才分为左边数组和右边数组
     length = len(a)
     mid = length // 2
     left = a[:mid]
     right = a[mid:]
     
-    R_MergeSort(left)
-    R_MergeSort(right)
+    count += R_MergeSort(left)
+    count += R_MergeSort(right)
  
  
-  i, j, k = 0, 0, 0
-  
-  while i < len(left) and j < len(right):
-    if left[i] <= right[j]:
+    i, j, k = 0, 0, 0
+
+    while i < len(left) and j < len(right):
+      if left[i] <= right[j]:
+        a[k] = left[i]
+        i += 1
+      else:
+        count += len(left) - i
+        a[k] = right[j]
+        j += 1
+      k += 1
+
+    while i < len(left):
       a[k] = left[i]
       i += 1
-    else:
-      count += 1
+      k += 1
+
+    while j < len(right):
       a[k] = right[j]
       j += 1
-    k += 1
-  
-  while i < len(left):
-    a[k] = left[i]
-    count += len(right)
-    i += 1
-    k += 1
-  
-  while j < len(right)
-    a[k] = right[j]
-    j += 1
-    k += 1
-  
-  return a
-  
-alist = [10, 8, 7, 3, 12, 11, 5, 2]
-print(reverse_order_number(alist))
+      k += 1
+
+  return count
+
+alist = [2, 7, 6, 3, 4, 5, 1]
+print(InversePairs(alist))
